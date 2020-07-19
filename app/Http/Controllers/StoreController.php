@@ -14,13 +14,21 @@ class StoreController extends Controller
         return ['stores'=>$stores];
     }
 
-    public function create()
-    {
-        
-    }
-
     public function store(Request $request)
     {
+        $store = new Store();
+        $store->name = slug($request->name);
+        $store->location = slug($request->location);
+        $store->contact = $request->contact;
+        $store->latitude = floatval($request->latitude);
+        $store->longitude = floatval($request->longitude);
+        
+        try{
+            $store->save();
+            return ["msg"=>"new record created"];
+        }catch(Exception $ex){
+            abort(500,"Failed to create store");
+        }
         
     }
 
@@ -39,10 +47,21 @@ class StoreController extends Controller
     {
         
     }
-
     
     public function destroy($id)
     {
     
     }
+}
+
+function slug($string) {
+    //Lower case everything
+    $string = strtolower($string);
+    //Make alphanumeric (removes all other characters)
+    $string = preg_replace("/[^a-z0-9_\s-]/", "", $string);
+    //Clean up multiple dashes or whitespaces
+    $string = preg_replace("/[\s-]+/", " ", $string);
+    //Convert whitespaces and underscore to dash
+    $string = preg_replace("/[\s_]/", "-", $string);
+    return $string;
 }
