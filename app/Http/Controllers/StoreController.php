@@ -41,11 +41,25 @@ class StoreController extends Controller
     public function edit($id)
     {
         
+
     }
   
     public function update(Request $request, $id)
     {
+        $store = Store::where('id',$id)->first();
+
+        $store->name = slug($request->name);
+        $store->location = slug($request->location);
+        $store->contact = $request->contact;
+        $store->latitude = floatval($request->latitude);
+        $store->longitude = floatval($request->longitude);
         
+        try{
+            $store->save();
+            return ["msg"=>"record updated"];
+        }catch(Exception $ex){
+            abort(500,"Failed to create store");
+        }
     }
     
     public function destroy($id)
