@@ -64,6 +64,13 @@ class StoreController extends Controller
     
     public function destroy($id)
     {
+        $store = Store::where('id',$id)->first();
+        try{
+            $store->delete();
+            return["msg"=>"record deleted"];
+        }catch(Exception $ex){
+            return ["msg"=>"Deletion failed"];
+        }
     
     }
 }
