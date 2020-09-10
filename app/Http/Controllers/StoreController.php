@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Store;
+use App\Product;
 
 class StoreController extends Controller
 {
@@ -72,6 +73,17 @@ class StoreController extends Controller
             return ["msg"=>"Deletion failed"];
         }
     
+    }
+
+    public function products($id){
+        $store = Store::where('id',$id)->first();
+        $products = Product::where('store_id',$id)->get();
+
+        $res = [
+            "store"=>$store,
+            "products"=>$products
+        ];
+        return[$res];
     }
 }
 
